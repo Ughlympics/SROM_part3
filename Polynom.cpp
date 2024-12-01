@@ -58,9 +58,7 @@ Polynom Polynom::operator+(const Polynom& pol) const {
 
 Polynom Polynom::operator*(const Polynom& pol) const {
     std::bitset<_DOBLE_POWER> res;
-
     std::bitset<_DOBLE_POWER> l = double_pol(this->coefficients);
-    //std::bitset<_DOBLE_POWER> r = double_pol(pol.coefficients);
 
     for (int i = 0; i <= _POWER- 1; ++i, l <<= 1) {
         if (pol.coefficients[i]) {
@@ -72,6 +70,54 @@ Polynom Polynom::operator*(const Polynom& pol) const {
     return Polynom(return_size(res));
 }
 
+//operations
+Polynom Polynom::square() const {
+    return *this * *this;  
+}
+
+Polynom Polynom::trace(const Polynom& pol) {
+    Polynom res = pol;
+    Polynom cur = pol;
+    for (int i = 1; i < _POWER; ++i) {
+        cur = cur.square();
+        res.coefficients ^= cur.coefficients;
+    }
+    return res;
+}
+
+Polynom Polynom::inverse() const {
+    Polynom result = 1;
+
+    for (int i = 1; i < _POWER; ++i) {
+        result = result * *this;
+        result = result.square();
+    }
+
+    return result;
+}
+
+Polynom Polynom::pow(const Polynom& n) const {
+    Polynom res = 1;
+    Polynom base = *this;
+    bool isFirstIteration = true;
+
+    for (int i = 0; i < _POWER; ++i) {
+        if (n.coefficients[i]) {
+            if (isFirstIteration) {
+                res = base; 
+                isFirstIteration = false;
+            }
+            else {
+                res = res * base;
+            }
+        }
+        base = base.square();
+    }
+
+    return res;
+}
+
+//helpers
 std::bitset<Polynom::_DOBLE_POWER> Polynom::double_pol(const std::bitset<_POWER>& pol) {
     std::bitset<Polynom::_DOBLE_POWER> doubled;
     for (int i = 0; i < _POWER; ++i)

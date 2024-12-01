@@ -27,7 +27,13 @@ public:
 	Polynom operator+(const Polynom&) const;
 	Polynom operator*(const Polynom&) const;
 
-    //
+	//operstions
+	Polynom square() const;
+	static Polynom trace(const Polynom&);
+	Polynom inverse() const;
+	Polynom pow(const Polynom& exp) const;
+
+    //helpers
 	static std::bitset<_DOBLE_POWER> double_pol(const std::bitset<_POWER >&);
 	static std::bitset<_POWER> return_size(const std::bitset<_DOBLE_POWER>&);
 	static void reduction(std::bitset<_DOBLE_POWER>&);
